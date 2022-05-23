@@ -108,7 +108,7 @@
     source /etc/profile
     # needs to be root
     ln -s /opt/rh/rh-postgresql13/root/usr/lib64/libpq.so.rh-postgresql13-5 /usr/lib64/libpq.so.rh-postgresql13-5
-  when: not lib_result.stat.isreg
+  when: not lib_result.stat.exists
 # -----------------------------------------------
 # start firewalld so that other installation modules can configure security
 # -----------------------------------------------
