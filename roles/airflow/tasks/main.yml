@@ -109,7 +109,7 @@
   pip:
     name: apache-airflow
     executable: pip3 #-9.0.3
-    extra_args: "--constraint "/tmp/constraints-3.8.txt" --user"
+    extra_args: "--constraint /tmp/constraints-3.8.txt --user"
     state: present
 
 - name: Creates airflow_home directory if doesn't exists
