@@ -1,0 +1,42 @@
+- name: Install boto3 to interact with aws services for service account
+  pip:
+    name: boto3
+    version: 1.21.13
+    executable: pip3 #-9.0.3
+    extra_args: "--user"
+    state: present
+  become: false
+
+- name: Verify if boto3 is installed
+  shell: pip3 freeze | grep boto3 >> /dev/null 2>&1
+  become: false
+  changed_when: false
+
+- name: "Fetch SSM Parameters"
+  set_fact:
+    artf_user: "{{ lookup('aws_ssm', '/ato/sdpaap/{{ env_name|lower }}/devops/artf_user',region='ap-southeast-2') }}"
+    artf_encrypted_password: "{{ lookup('aws_ssm', '/ato/sdpaap/{{ env_name|lower }}/devops/artf_encrypted_password',region='ap-southeast-2') }}"
+    linux_server_admin_username: "{{ lookup('aws_ssm', '/ato/sdpaap/{{ env_name|lower }}/devops/linux_server_admin_user',region='ap-southeast-2') }}"
+  become: False
+
+- name: Determinte artifactory release path for non prod
+  set_fact:
+    artf_release_path: "sdp-aapiac-generic-develop-local"
+    artf_rpm_rhel7_release_path: "sdp-aap-rhel7-rpm-develop-local"
+  when: '("{{ landing_zone|lower }}" == "devtest") or 
+        ("{{ landing_zone|lower }}" == "preprod")'
+  
+# - name: Determinte artifactory release path for prod
+#   set_fact:
+#     artf_release_path: "sdp-aapiac-generic-release-local"
+#     artf_rpm_rhel7_release_path: "sdpaap-rhel7-rpm-release-local"
+#   when: '("{{ landing_zone|lower }}" == "discovery") or 
+#         ("{{ landing_zone|lower }}" == "staging") or
+#         ("{{ landing_zone|lower }}" == "prod")'
+
+- name: Setup Artifactory repo file under /etc/yum.repos.d
+  template:
+    src: ../templates/Artifactory.repo.j2
+    dest: /etc/yum.repos.d/Artifactory.repo
+    mode: '600'
+  become: yes
