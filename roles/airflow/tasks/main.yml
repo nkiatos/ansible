@@ -104,9 +104,9 @@
 #     source ~/.bashrc
 
 - name: Install Airflow under airflow user account
-  pip:
   become: yes
-  become_user: airflow
+  become_user: airflow  
+  pip:
     name: apache-airflow
     executable: pip3 #-9.0.3
     extra_args: "--constraint "/tmp/constraints-3.8.txt" --user"
