@@ -90,6 +90,26 @@
 #     mv /tmp/webserver_config.py /opt/airflow
 #     chown -R airflow:airflow /opt/airflow
 
+
+
+- name: Checks if post package installation has been done
+  stat:
+    path: "/etc/profile.d/airflow.sh"
+  register: airflow_home_result
+
+- debug:
+    msg: "The file /etc/profile.d/airflow.sh, skipping next step"
+  when: airflow_home_result.stat.exists
+    
+- name: Post package installation requirements
+  become: yes
+  shell: |
+    #!bin/bash
+    bash -c 'echo "export AIRFLOW_HOME=/opt/airflow" >> /etc/profile.d/airflow.sh'
+    source /etc/profile
+    # needs to be root
+  when: not airflow_home_result.stat.exists
+
 - name: Checks if Airflow installation has been done
   stat:
     path: "/home/airflow/.local/bin/airflow"
@@ -106,13 +126,13 @@
     #!bin/bash
     source /etc/profile    
     CONSTRAINT_URL="/tmp/constraints-3.8.txt"
-    AIRFLOW_HOME=/opt/airflow
-    pip install apache-airflow --constraint "${CONSTRAINT_URL}" --user
+    export AIRFLOW_HOME=/opt/airflow
+    pip install apache-airflow['postgresql'] --constraint "${CONSTRAINT_URL}" --user
     #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
     bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
     source ~/.bashrc
   when: not airflow_result.stat.exists
-  
+
 # - name: Install Airflow under airflow user account
 #   become: yes
 #   become_user: airflow  
