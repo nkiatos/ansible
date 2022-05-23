@@ -1,9 +1,138 @@
----
-# tasks file for ./setup-prereq
+# ---------------------------------------------
+# Prerequisites conf1guration
+# These are the tasks that setup a baseline RHEL7 machine and perform
+# widely cross-cutting configuration (for example setting the timezone)
+# ---------------------------------------------
 
-- import_tasks: 00-pre-init.yml
-- import_tasks: 01-init.yml
-#- import_tasks: 02-post-init.yml
-- import_tasks: 98-complete.yml
-- import_tasks: 99-post-complete.yml
-# - import_tasks:
+- name: get time zone
+  command: date +"%Z %z"
+  register: actualTimezone
+
+- name: get date
+  command: date +"%Y-%m-%d %H-%M-%S %Z"
+  register: actualDate
+
+- name: get hostname
+  command: hostname
+  register: actualHostname
+
+- name: get current directory
+  command: pwd
+  register: pwdOutput
+
+- name: show current directory
+  debug:
+    var: pwdOutput    
+
+- name: set time zone
+  become: yes
+  command: timedatectl set-timezone "Australia/Sydney" #'{{ intendedTimezone }}'
+
+# --------------------------------------------------------------------
+#                       SETTING UP REPOS
+# --------------------------------------------------------------------
+# 1) The VRA machine comes with redhat.repo that has 
+# a variety of standard redhat supported packages.
+# 2) SDPAAP machines use additional repos
+#   2-a) An RPM repo in Artifactory (for additional rpms that are not in Satellite)
+#   2-b) A Pypi repo in Artifactory (a remote over https://files.pythonhosted.org/)
+# --------------------------------------------------------------------
+
+- name: Enable Satellite EPEL repo
+  become: yes
+  shell: subscription-manager repos --enable=Cloud_UNCLASS_Fedora_Project_EPEL-7
+
+- name: Enable the AWS Utils repo
+  become: yes
+  shell: subscription-manager repos --enable=Cloud_UNCLASS_AWS_utils-el7
+
+- name: allow optional rpms
+  become: yes
+  command: yum-config-manager --enable "rhel-*-optional-rpms" 
+
+- name: show current directory
+  debug:
+    var: playbook_dir
+
+# artifactory
+# pypi
+
+- name: Set yum cache configuration to secondary storage
+  become: yes
+  lineinfile:
+    path: /etc/yum.conf
+    regexp: '^cachedir='
+    line: cachedir=/data/app/yumcache
+
+#----------------------------------------------------------
+# Essential RPM installations
+# firewalld MUST BE IN THE INSTALLED PACKAGES
+#----------------------------------------------------------
+
+- name: ensure OS is current
+  become: yes
+  ignore_errors: yes
+  yum: 
+    update_only: yes
+    state: latest
+
+- name: Install common packages
+  become: yes
+  yum: 
+    name:
+      - rh-python38    
+      - firewalld
+      - git
+      - unzip
+      - yum-utils
+      - rh-postgresql13
+      - rh-python38-python-psycopg2
+      #- amazon-efs-utils
+    state: present
+
+# -----------------------------------------------
+# Add rh-python3.8 to PATH in Profile
+# Accessible for all users
+# -----------------------------------------------
+
+- name: Post package installation requirements
+  become: yes
+  shell: |
+    #!bin/bash
+    ### NEW CONFIG ###
+    bash -c 'echo "export PATH=$PATH:/opt/rh/rh-python38/root/bin:/opt/rh/rh-postgresql13/root/bin" >> /etc/profile.d/custom.sh'
+    source /etc/profile
+    # needs to be root
+    ln -s /opt/rh/rh-postgresql13/root/usr/lib64/libpq.so.rh-postgresql13-5 /usr/lib64/libpq.so.rh-postgresql13-5
+
+# -----------------------------------------------
+# start firewalld so that other installation modules can configure security
+# -----------------------------------------------
+- name: start the firewall
+  become: yes
+  service: 
+    name: firewalld
+    state: started
+    enabled: yes 
+
+- name: Reload the firewall
+  become: yes
+  service:
+    name: firewalld
+    state: reloaded
+
+- name: Clear the yum cache 
+  become: yes
+  command: yum clean all
+
+# Here it is useful to take stock of the POST-CONFIG package list
+# /var/log/AnsibleConfig/YY-MM-DD-HH-MM-post|pre.txt
+- name: "Capture post-config state"
+  become: yes
+  shell: |
+    #!bin/bash 
+    SNAP_DIR=/var/log/yum-snapshots 
+    SNAP_POST_DATE=$(date +"%Y-%m-%d-%H-%M")
+    SNAP_POST_FILE=$SNAP_DIR/$SNAP_POST_DATE-post.txt
+    mkdir -p $SNAP_DIR 
+    yum list installed > $SNAP_POST_FILE
