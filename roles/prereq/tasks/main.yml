@@ -101,7 +101,7 @@
   register: lib_result
 
 - debug:
-    msg: "The file or directory exists"
+    msg: "The file /usr/lib64/libpq.so.rh-postgresql13-5 does not exist"
   when: lib_result.stat.exists
     
 - name: Post package installation requirements

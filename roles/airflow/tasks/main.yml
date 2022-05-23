@@ -104,17 +104,43 @@
     bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
     source ~/.bashrc
 
-# Configure Airflow
-- name: Configure Airflow
-  become: yes
-  shell: |
-    #!bin/bash
-    mkdir /run/airflow
-    chown airflow:airflow /run/airflow
-    chmod 0755 airflow -R
-    # Enable airflow service
-    systemctl enable airflow-scheduler
-    systemctl enable airflow-webserver
+- name: Creates airflow_home directory if doesn't exists
+  file:
+    path: /run/airflow
+    state: directory
+    owner: airflow
+    group: airflow
+    mode: 0755
+
+# Enable Airflow webserver service
+- name: Enable Airflow webserver service
+  service:
+    name: airflow-webserver
+    enabled: yes
+
+# Enable Airflow schedular service
+- name: Enable Airflow scheduler service
+  service:
+    name: airflow-scheduler
+    enabled: yes
+
+# # Configure Airflow
+# - name: Configure Airflow
+#   become: yes
+#   shell: |
+#     #!bin/bash
+#     # Enable airflow service
+#     systemctl enable airflow-scheduler
+#     systemctl enable airflow-webserver
+
+- name: Check if kubectl exists
+  stat:
+    path: "/home/airflow/.local/bin/kubectl"
+  register: kubectl_result
+
+- debug:
+    msg: "The file /home/airflow/.local/bin/kubectl does not exist"
+  when: kubectl_result.stat.exists
 
 # Install Kubectl
 - name: Install Kubectl to be run by the airflow user
@@ -128,4 +154,5 @@
     chmod +x ./kubectl
     mv ./kubectl /home/airflow/.local/bin/kubectl
     #kubectl version --short --client
+  when: not kubectl_result.stat.exists
 
