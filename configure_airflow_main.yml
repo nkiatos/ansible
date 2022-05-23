@@ -2,7 +2,7 @@
 - name: this playbook installs airflow
   hosts: airflow-new #airflow-vm
   become: true
-  gather_Facts: yes
+  gather_facts: yes
   roles:
     - prereq
     #- repos
