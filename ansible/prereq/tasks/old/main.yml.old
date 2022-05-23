@@ -1,9 +1,0 @@
----
-# tasks file for ./setup-prereq
-
-- import_tasks: 00-pre-init.yml
-- import_tasks: 01-init.yml
-#- import_tasks: 02-post-init.yml
-- import_tasks: 98-complete.yml
-- import_tasks: 99-post-complete.yml
-# - import_tasks:

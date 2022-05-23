@@ -38,17 +38,17 @@
 #   2-b) A Pypi repo in Artifactory (a remote over https://files.pythonhosted.org/)
 # --------------------------------------------------------------------
 
-- name: Enable Satellite EPEL repo
-  become: yes
-  shell: subscription-manager repos --enable=Cloud_UNCLASS_Fedora_Project_EPEL-7
+# - name: Enable Satellite EPEL repo
+#   become: yes
+#   shell: subscription-manager repos --enable=Cloud_UNCLASS_Fedora_Project_EPEL-7
 
-- name: Enable the AWS Utils repo
-  become: yes
-  shell: subscription-manager repos --enable=Cloud_UNCLASS_AWS_utils-el7
+# - name: Enable the AWS Utils repo
+#   become: yes
+#   shell: subscription-manager repos --enable=Cloud_UNCLASS_AWS_utils-el7
 
-- name: allow optional rpms
-  become: yes
-  command: yum-config-manager --enable "rhel-*-optional-rpms" 
+# - name: allow optional rpms
+#   become: yes
+#   command: yum-config-manager --enable "rhel-*-optional-rpms" 
 
 - name: show current directory
   debug:
