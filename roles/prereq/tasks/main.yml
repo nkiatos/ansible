@@ -100,9 +100,9 @@
     path: "/usr/lib64/libpq.so.rh-postgresql13-5"
   register: lib_result
 
-  - debug:
-      msg: "The file or directory exists"
-    when: file_details.stat.exists
+- debug:
+    msg: "The file or directory exists"
+  when: file_details.stat.exists
     
 - name: Post package installation requirements
   become: yes
