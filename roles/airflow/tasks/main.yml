@@ -109,5 +109,5 @@
     #wget https://artifactory.ctz.atocnet.gov.au:443/artifactory/sdp-aapiac-generic-develop-local/kubernetes/kubectl-1.21
     chmod +x ./kubectl
     mv ./kubectl /home/airflow/.local/bin/kubectl
-    kubectl version --short --client
+    echo kubectl version --short --client
 
