@@ -91,18 +91,26 @@
 #     chown -R airflow:airflow /opt/airflow
 
 # Install Airflow as the airflow user
-- name: Install Airflow as airflow user
+# - name: Install Airflow as airflow user
+#   become: yes
+#   shell: |
+#     #!bin/bash
+#     source /etc/profile    
+#     CONSTRAINT_URL="/tmp/constraints-3.8.txt"
+#     AIRFLOW_HOME=/opt/airflow
+#     pip install apache-airflow --constraint "${CONSTRAINT_URL}" --user
+#     #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
+#     bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
+#     source ~/.bashrc
+
+- name: Install Airflow under airflow user account
+  pip:
   become: yes
   become_user: airflow
-  shell: |
-    #!bin/bash
-    source /etc/profile    
-    CONSTRAINT_URL="/tmp/constraints-3.8.txt"
-    AIRFLOW_HOME=/opt/airflow
-    pip install apache-airflow --constraint "${CONSTRAINT_URL}" --user
-    #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
-    bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
-    source ~/.bashrc
+    name: apache-airflow
+    executable: pip3 #-9.0.3
+    extra_args: "--constraint "/tmp/constraints-3.8.txt" --user"
+    state: present
 
 - name: Creates airflow_home directory if doesn't exists
   file:

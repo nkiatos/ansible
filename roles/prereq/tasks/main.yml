@@ -69,12 +69,13 @@
 # firewalld MUST BE IN THE INSTALLED PACKAGES
 #----------------------------------------------------------
 
-- name: ensure OS is current
-  become: yes
-  ignore_errors: yes
-  yum: 
-    update_only: yes
-    state: latest
+# Commenting out to speed up run time
+# - name: ensure OS is current
+#   become: yes
+#   ignore_errors: yes
+#   yum: 
+#     update_only: yes
+#     state: latest
 
 - name: Install common packages
   become: yes
@@ -101,7 +102,7 @@
   register: lib_result
 
 - debug:
-    msg: "The file /usr/lib64/libpq.so.rh-postgresql13-5 does not exist"
+    msg: "The file /usr/lib64/libpq.so.rh-postgresql13-5 exists, skipping next step"
   when: lib_result.stat.exists
     
 - name: Post package installation requirements
