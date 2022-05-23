@@ -1,0 +1,30 @@
+# Copy constraints file
+- name: copy index.html
+  copy:
+    src: /opt/ansible/setup-airflow/files/constraints-3.8.txt
+    dest: /tmp
+    mode: 0666
+
+# Install Airflow
+- name: "Create the Airflow user"
+  become: yes
+  shell: |
+    #!bin/bash
+    sudo useradd airflow
+    sudo mkdir /opt/airflow
+    sudo chown -R airflow:airflow /opt/airflow
+    sudo bash -c 'echo "export AIRFLOW_HOME=/opt/airflow" >> /etc/profile.d/custom.sh'
+    source /etc/profile.d/custom.sh
+
+# Install Airflow as the airflow user
+- name: "Install Airflow as airflow user"
+  become: yes
+  become_user: airflow
+  shell: |
+    #!bin/bash
+    whoami >> /tmp/whoami.txt
+    source /etc/profile.d/custom.sh
+    pip install apache-airflow --constraint /tmp/constraints-3.8.txt --user
+    echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
+    source ~/.bashrc
+

@@ -1,0 +1,16 @@
+- name: Ensure firewall is installed and enabled
+  become: yes
+  service: 
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Reload the firewall
+  become: yes
+  service:
+    name: firewalld
+    state: reloaded
+
+- name: Clear the yum cache 
+  become: yes
+  command: yum clean all
