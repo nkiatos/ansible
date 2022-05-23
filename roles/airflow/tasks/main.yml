@@ -122,6 +122,7 @@
 #Install Airflow as the airflow user
 - name: Install Airflow as airflow user
   become: yes
+  become_user: airflow
   shell: |
     #!bin/bash
     source /etc/profile    
