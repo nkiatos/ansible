@@ -8,20 +8,6 @@
     dest: /tmp
     mode: 0666
 
-# Copy airflow.cfg file
-- name: Copy airflow.cfg file
-  copy:
-    src: files/airflow.cfg
-    dest: /tmp
-    mode: 0644
-
-# Copy webserver_config.py file
-- name: Copy webserver_config file
-  copy:
-    src: files/webserver_config.py
-    dest: /tmp
-    mode: 0664    
-
 # Copy Airflow scheduler service
 - name: Copy Airflow scheduler service
   copy:
@@ -55,22 +41,54 @@
 ##########################################
 
 # Create Airflow user
-- name: Create the Airflow user and Airflow home
-  become: yes
-  shell: |
-    #!bin/bash
-    useradd airflow
-    mkdir /opt/airflow
-    chown -R airflow:airflow /opt/airflow
+# - name: Create the Airflow user and Airflow home
+#   become: yes
+#   shell: |
+#     #!bin/bash
+#     useradd airflow
+#     # mkdir /opt/airflow
+#     # chown -R airflow:airflow /opt/airflow
+
+# Create Airflow user
+- name: Create the Airflow user
+  user:
+    name: airflow
+    create_home: true
+
+- name: Creates airflow_home directory if doesn't exists
+  file:
+    path: /opt/airflow
+    state: directory
+    owner: airflow
+    group: airflow
+    mode: 0777
+
+# Copy airflow.cfg file
+- name: Copy airflow.cfg file
+  copy:
+    src: files/airflow.cfg
+    dest: /tmp
+    owner: airflow
+    group: airflow
+    mode: 0644
+
+# Copy webserver_config.py file
+- name: Copy webserver_config file
+  copy:
+    src: files/webserver_config.py
+    dest: /tmp
+    owner: airflow
+    group: airflow    
+    mode: 0664
 
 # Copy Airflow config files to Airflow home
-- name: Copy files to Airflow home
-  become: yes
-  shell: |
-    #!bin/bash
-    mv /tmp/airflow.cfg /opt/airflow
-    mv /tmp/webserver_config.py /opt/airflow
-    chown -R airflow:airflow /opt/airflow
+# - name: Copy files to Airflow home
+#   become: yes
+#   shell: |
+#     #!bin/bash
+#     mv /tmp/airflow.cfg /opt/airflow
+#     mv /tmp/webserver_config.py /opt/airflow
+#     chown -R airflow:airflow /opt/airflow
 
 # Install Airflow as the airflow user
 - name: Install Airflow as airflow user
@@ -109,5 +127,5 @@
     #wget https://artifactory.ctz.atocnet.gov.au:443/artifactory/sdp-aapiac-generic-develop-local/kubernetes/kubectl-1.21
     chmod +x ./kubectl
     mv ./kubectl /home/airflow/.local/bin/kubectl
-    echo kubectl version --short --client
+    #kubectl version --short --client
 
