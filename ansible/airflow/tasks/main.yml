@@ -1,0 +1,113 @@
+#########################################
+#  Copy files
+##########################################
+# Copy constraints file
+- name: Copy constraints file
+  copy:
+    src: files/constraints-3.8.txt
+    dest: /tmp
+    mode: 0666
+
+# Copy airflow.cfg file
+- name: Copy airflow.cfg file
+  copy:
+    src: files/airflow.cfg
+    dest: /tmp
+    mode: 0644
+
+# Copy webserver_config.py file
+- name: Copy webserver_config file
+  copy:
+    src: files/webserver_config.py
+    dest: /tmp
+    mode: 0664    
+
+# Copy Airflow scheduler service
+- name: Copy Airflow scheduler service
+  copy:
+    src: files/airflow-scheduler.service
+    dest: /usr/lib/systemd/system
+    mode: 0644
+
+# Copy Airflow webserver service
+- name: Copy Airflow webserver service
+  copy:
+    src: files/airflow-webserver.service
+    dest: /usr/lib/systemd/system
+    mode: 0644
+
+# Copy Airflow conf file
+- name: Copy Airflow conf file
+  copy:
+    src: files/airflow.conf
+    dest: /usr/lib/tmpfiles.d
+    mode: 0644            
+
+# Copy Airflow file
+- name: Copy Airflow file
+  copy:
+    src: files/airflow
+    dest: /etc/sysconfig
+    mode: 0644  
+
+#########################################
+#  Airflow config
+##########################################
+
+# Create Airflow user
+- name: Create the Airflow user and Airflow home
+  become: yes
+  shell: |
+    #!bin/bash
+    useradd airflow
+    mkdir /opt/airflow
+    chown -R airflow:airflow /opt/airflow
+
+# Copy Airflow config files to Airflow home
+- name: Copy files to Airflow home
+  become: yes
+  shell: |
+    #!bin/bash
+    mv /tmp/airflow.cfg /opt/airflow
+    mv /tmp/webserver_config.py /opt/airflow
+    chown -R airflow:airflow /opt/airflow
+
+# Install Airflow as the airflow user
+- name: Install Airflow as airflow user
+  become: yes
+  become_user: airflow
+  shell: |
+    #!bin/bash
+    source /etc/profile    
+    CONSTRAINT_URL="/tmp/constraints-3.8.txt"
+    AIRFLOW_HOME=/opt/airflow
+    pip install apache-airflow --constraint "${CONSTRAINT_URL}" --user
+    #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
+    bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
+    source ~/.bashrc
+
+# Configure Airflow
+- name: Configure Airflow
+  become: yes
+  shell: |
+    #!bin/bash
+    mkdir /run/airflow
+    chown airflow:airflow /run/airflow
+    chmod 0755 airflow -R
+    # Enable airflow service
+    systemctl enable airflow-scheduler
+    systemctl enable airflow-webserver
+
+# Install Kubectl
+- name: Install Kubectl to be run by the airflow user
+  become: yes
+  become_user: airflow
+  shell: |
+    #!bin/bash
+    cd ~
+    curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+    #wget https://artifactory.ctz.atocnet.gov.au:443/artifactory/sdp-aapiac-generic-develop-local/kubernetes/kubectl-1.21
+    chmod +x ./kubectl
+    mv ./kubectl $HOME/.local/bin/kubectl
+    kubectl version --short --client
+

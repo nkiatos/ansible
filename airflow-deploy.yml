@@ -1,7 +1,0 @@
----
-- name: this playbook installs airflow
-  hosts: airflow-new #airflow-vm
-  become: true
-  roles:
-    - roles/setup-prereq
-    - roles/setup-airflow
