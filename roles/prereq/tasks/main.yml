@@ -102,7 +102,7 @@
 
 - debug:
     msg: "The file or directory exists"
-  when: file_details.stat.exists
+  when: lib_result.stat.exists
     
 - name: Post package installation requirements
   become: yes
