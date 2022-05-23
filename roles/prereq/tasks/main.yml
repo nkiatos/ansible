@@ -95,6 +95,15 @@
 # Accessible for all users
 # -----------------------------------------------
 
+- name: Checks if post package installation has been done
+  stat:
+    path: "/usr/lib64/libpq.so.rh-postgresql13-5"
+  register: lib_result
+
+  - debug:
+      msg: "The file or directory exists"
+    when: file_details.stat.exists
+    
 - name: Post package installation requirements
   become: yes
   shell: |
@@ -103,7 +112,7 @@
     source /etc/profile
     # needs to be root
     ln -s /opt/rh/rh-postgresql13/root/usr/lib64/libpq.so.rh-postgresql13-5 /usr/lib64/libpq.so.rh-postgresql13-5
-
+  when: not lib_result.stat.exists
 # -----------------------------------------------
 # start firewalld so that other installation modules can configure security
 # -----------------------------------------------

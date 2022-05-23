@@ -1,5 +1,0 @@
----
-# tasks file for ./setup-airflow
-#- import_tasks: 01-init-repo.yml
-- import_tasks: 02-install-python.yml
-- import_tasks: 03-install-airflow.yml

@@ -1,9 +1,0 @@
-# Enables the required repos
-
-- name: "Enable repos"
-  become: yes
-  shell: |
-    #!bin/bash
-    sudo subscription-manager register --username nickkdev1 --password !@ZjU8XGEfBL9$ --auto-attach
-    sudo subscription-manager attach --pool=8a82c68d80862c730180b73bc7ba3367
-    sudo subscription-manager repos --enable rhel-7-server-optional-rpms --enable rhel-server-rhscl-7-rpms
