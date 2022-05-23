@@ -1,0 +1,150 @@
+# ---------------------------------------------
+# Prerequisites conf1guration
+# These are the tasks that setup a baseline RHEL7 machine and perform
+# widely cross-cutting configuration (for example setting the timezone)
+# ---------------------------------------------
+
+- name: get time zone
+  command: date +"%Z %z"
+  register: actualTimezone
+
+- name: get date
+  command: date +"%Y-%m-%d %H-%M-%S %Z"
+  register: actualDate
+
+- name: get hostname
+  command: hostname
+  register: actualHostname
+
+- name: get current directory
+  command: pwd
+  register: pwdOutput
+
+- name: show current directory
+  debug:
+    var: pwdOutput    
+
+- name: set time zone
+  become: yes
+  command: timedatectl set-timezone '{{ intendedTimezone }}'
+
+# --------------------------------------------------------------------
+#                       SETTING UP REPOS
+# --------------------------------------------------------------------
+# 1) The VRA machine comes with redhat.repo that has 
+# a variety of standard redhat supported packages.
+# 2) SDPAAP machines use additional repos
+#   2-a) An RPM repo in Artifactory (for additional rpms that are not in Satellite)
+#   2-b) A Pypi repo in Artifactory (a remote over https://files.pythonhosted.org/)
+# --------------------------------------------------------------------
+
+#- name: Enable Satellite EPEL repo
+#  become: yes
+#  shell: subscription-manager repos --enable=Cloud_UNCLASS_Fedora_Project_EPEL-7
+
+- name: show current directory
+  debug:
+    var: playbook_dir
+
+#- name: Define SDPAAP Artifactory RPM repo
+#  become: yes
+#  template:
+#    # src: "{{ playbook_dir }}/{{ sdpaap_landingzone }}/{{ sdpaap_environment }}/files/Artifactory.rhel7.repo.j2"
+#    src: "Artifactory.rhel7.repo.j2"    
+#    dest: /etc/yum.repos.d/Artifactory.repo
+#    owner: "root"
+#    group: "root"
+#    mode: '644'
+
+#- name: Define SDPAAP Pypi remote in /etc/pip.conf
+#  become: yes
+#  template:
+#    # src: "{{ playbook_dir }}/{{ sdpaap_landingzone }}/{{ sdpaap_environment }}/files/Artifactory.pip.conf.j2"
+#    src: "Artifactory.pip.conf.j2"    
+#    dest: /etc/pip.conf
+#    owner: "{{ ansible_user }}"
+#    mode: '644'
+
+- name: Set yum cache configuration to secondary storage
+  become: yes
+  lineinfile:
+    path: /etc/yum.conf
+    regexp: '^cachedir='
+    line: cachedir=/data/app/yumcache
+
+#----------------------------------------------------------
+# Essential RPM installations
+# firewalld MUST BE IN THE INSTALLED PACKAGES
+#----------------------------------------------------------
+
+- name: ensure OS is current
+  become: yes
+  ignore_errors: yes
+  yum: 
+    update_only: yes
+    state: latest
+
+- name: Install common packages
+  become: yes
+  yum: 
+    name:
+      - rh-python38    
+      - firewalld
+      - git
+      - unzip
+      - yum-utils
+      - rh-postgresql13
+      - rh-python38-python-psycopg2
+      #- amazon-efs-utils
+    state: present
+
+#- name: allow optional rpms
+#  become: yes
+#  command: yum-config-manager --enable "rhel-*-optional-rpms" 
+
+# -----------------------------------------------
+# Add rh-python3.8 to PATH in Profile
+# Accessible for all users
+# -----------------------------------------------
+
+- name: Post package installation requirements
+  become: yes
+  shell: |
+    #!bin/bash
+    ### NEW CONFIG ###
+    bash -c 'echo "export PATH=$PATH:/opt/rh/rh-python38/root/bin:/opt/rh/rh-postgresql13/root/bin" >> /etc/profile.d/custom.sh'
+    source /etc/profile
+    # needs to be root
+    ln -s /opt/rh/rh-postgresql13/root/usr/lib64/libpq.so.rh-postgresql13-5 /usr/lib64/libpq.so.rh-postgresql13-5
+
+# -----------------------------------------------
+# Install boto3 and botocore using pip3
+# -----------------------------------------------
+
+### COMMENTING OUT FOR NOW ###  
+# - name: Install boto3 and botocore
+#   pip:
+#     name: boto3
+#     version: 1.21.13 ## Is this the correct version? todo
+#     executable: pip3 #-9.0.3
+#     extra_args: "--user"
+#     state: present
+#   become: true
+#   become_user: "{{ ansible_user }}"
+#   become_method: sudo
+
+# -----------------------------------------------
+# start firewalld so that other installation modules can configure security
+# -----------------------------------------------
+- name: start the firewall
+  become: yes
+  service: 
+    name: firewalld
+    state: started
+    enabled: yes 
+
+
+
+
+
+    

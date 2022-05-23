@@ -1,0 +1,7 @@
+---
+# tasks file for ./setup-airflow
+
+- import_tasks: 01-copy-files.yml
+- import_tasks: 02-install-airflow.yml
+#- import_tasks: 03-configure-rds.yml
+# - import_tasks:

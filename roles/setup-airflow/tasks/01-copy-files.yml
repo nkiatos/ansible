@@ -1,0 +1,51 @@
+#########################################
+#  Copy files
+##########################################
+# Copy constraints file
+- name: Copy constraints file
+  copy:
+    src: files/constraints-3.8.txt
+    dest: /tmp
+    mode: 0666
+
+# Copy airflow.cfg file
+- name: Copy airflow.cfg file
+  copy:
+    src: files/airflow.cfg
+    dest: /tmp
+    mode: 0644
+
+# Copy webserver_config.py file
+- name: Copy webserver_config file
+  copy:
+    src: files/webserver_config.py
+    dest: /tmp
+    mode: 0664    
+
+# Copy Airflow scheduler service
+- name: Copy Airflow scheduler service
+  copy:
+    src: files/airflow-scheduler.service
+    dest: /usr/lib/systemd/system
+    mode: 0644
+
+# Copy Airflow webserver service
+- name: Copy Airflow webserver service
+  copy:
+    src: files/airflow-webserver.service
+    dest: /usr/lib/systemd/system
+    mode: 0644
+
+# Copy Airflow conf file
+- name: Copy Airflow conf file
+  copy:
+    src: files/airflow.conf
+    dest: /usr/lib/tmpfiles.d
+    mode: 0644            
+
+# Copy Airflow file
+- name: Copy Airflow file
+  copy:
+    src: files/airflow
+    dest: /etc/sysconfig
+    mode: 0644  

@@ -1,0 +1,32 @@
+# Install Airflow as the airflow user
+- name: Install Airflow as airflow user
+  become: yes
+  become_user: airflow
+  shell: |
+    #!bin/bash
+    ## source /etc/profile.d/custom.sh
+    ## pip install apache-airflow --constraint /tmp/constraints-3.8.txt --user
+    ## echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
+    ## source ~/.bashrc
+    ### NEW CONFIG ###
+    #source /etc/profile.d/custom.sh    
+    CONSTRAINT_URL="/tmp/constraints-3.8.txt"
+    AIRFLOW_HOME=/opt/airflow
+    pip install apache-airflow --constraint "${CONSTRAINT_URL}" --user
+    #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
+    bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
+    source ~/.bashrc
+
+# Configure Airflow
+- name: Configure Airflow
+  become: yes
+  shell: |
+    #!bin/bash
+    mkdir /run/airflow
+    chown airflow:airflow /run/airflow
+    chmod 0755 airflow -R
+    # Enable airflow service
+    systemctl enable airflow-scheduler
+    systemctl enable airflow-webserver
+
+# RDS Config
