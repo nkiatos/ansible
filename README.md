@@ -46,9 +46,17 @@ ssh-copy-id node ip
 # Run ansible playbook
 ansible-playbook -i inventories/hosts configure_airflow_main.yml --check
 
+# To do:
+# Set up firewalld
+sudo firewall-cmd --zone=public --add-port=8080/tcp
 
+sudo firewall-cmd --zone=public --add-port=80/tcp
 
-Helpful URLs
+sudo firewall-cmd --runtime-to-permanent
+
+sudo firewall-cmd --reload
+
+# Helpful URLs
 https://github.com/kyungw00k/ansible-airflow
 
 https://github.com/idealista/airflow-role
