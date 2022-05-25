@@ -178,7 +178,7 @@
   register: kubectl_result
 
 - debug:
-    msg: "The file /home/airflow/.local/bin/kubectl does not exist"
+    msg: "The file /home/airflow/.local/bin/kubectl exists, skipping install step"
   when: kubectl_result.stat.exists
 
 # Install Kubectl
