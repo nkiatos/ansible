@@ -22,11 +22,11 @@ cd /opt/ansible
 # Set up to deploy from Ansible Master to Node
 
 
-<b> ansible master </b>
+<b><u> ansible master </b></u>
 
 ssh-keygen
 
-<b> ansible node </b>
+<b><u> ansible node </b></u>
 
 sudo useradd ansadmin
 
@@ -41,7 +41,7 @@ PasswordAuthentication yes
 #PasswordAuthentication no
 sudo systemctl restart sshd
 
-<b> ansible master </b>
+<b><u> ansible master </b></u>
 
 su ansadmin
 
