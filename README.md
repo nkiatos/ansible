@@ -7,8 +7,11 @@ git pull https://github.com/nkiatos/ansible.git
 
 # Creating ansible user
 useradd ansadmin
+
 chown -R ansadmin:ansadmin /opt/ansible
+
 su ansadmin
+
 cd /opt/ansible
 
 # Install python3
