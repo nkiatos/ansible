@@ -128,7 +128,7 @@
 - name: Set python3
   become: yes
   command: ln -s /opt/rh/rh-python38/root/usr/bin/python /usr/bin/python3
-  when: python3_result.stat.exists
+  when: not python3_result.stat.exists
 
   ### Pip3 ###
 - name: Checks if post pip3 installation has been done
@@ -143,7 +143,7 @@
 - name: Set pip3
   become: yes
   command: ln -s /opt/rh/rh-python38/root/usr/bin/pip /usr/bin/pip3
-  when: pip3_result.stat.exists
+  when: not pip3_result.stat.exists
 
 # -----------------------------------------------
 # start firewalld so that other installation modules can configure security
