@@ -5,5 +5,5 @@
   gather_facts: yes
   roles:
     - prereq
-    #- repos
+    - repos
     - airflow
