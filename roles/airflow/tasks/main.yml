@@ -139,9 +139,25 @@
   become_user: airflow  
   pip:
     name: apache-airflow
-    executable: pip3 #-9.0.3
+    executable: pip3
     extra_args: "--constraint /tmp/constraints-3.8.txt --user"
     state: present
+
+- name: Install Airflow postgres provider
+  become: yes
+  become_user: airflow  
+  pip:
+    name: apache-airflow-providers-postgres
+    executable: pip3
+    state: present
+
+- name: Remove default Airflow sqlite provider
+  become: yes
+  become_user: airflow  
+  pip:
+    name: apache-airflow-providers-sqlite
+    executable: pip3
+    state: absent
 
 - name: Creates airflow_home directory if doesn't exists
   file:
