@@ -19,6 +19,30 @@ su ansadmin
 cd /opt/ansible
 
 
+# Set up to deploy from Ansible Master to Node
+
+
+<b> ansible master <b/>
+ssh-keygen
+
+<b> ansible node <b/>
+sudo useradd ansadmin
+sudo passwd ansadmin
+
+Create the ansadmin sudoers file
+sudo touch /etc/sudoers.d/10-ansible-user
+sudo echo 'ansadmin ALL=(ALL)      NOPASSWD: ALL' >> /etc/sudoers.d/10-ansible-user
+
+Update /etc/ssh/sshd_config 
+PasswordAuthentication yes
+#PasswordAuthentication no
+sudo systemctl restart sshd
+
+<b> ansible master <b/>
+su ansadmin
+ssh-copy-id node ip
+
+
 # Run ansible playbook
 ansible-playbook -i inventories/hosts configure_airflow_main.yml --check
 
@@ -28,3 +52,5 @@ Helpful URLs
 https://github.com/kyungw00k/ansible-airflow
 
 https://github.com/idealista/airflow-role
+
+https://towardsdatascience.com/how-to-run-apache-airflow-as-daemon-using-linux-systemd-63a1d85f9702
