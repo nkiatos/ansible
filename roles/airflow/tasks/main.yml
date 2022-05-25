@@ -158,7 +158,7 @@
   pip:
     name: apache-airflow-providers-sqlite
     executable: pip3
-    extra_args: "--user"
+    # extra_args: "--user"
     state: absent
 
 - name: Creates airflow_home directory if doesn't exists
