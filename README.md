@@ -1,7 +1,9 @@
 # Ansible playbook to deploy Apache Airflow
 
 sudo su
+
 cd /opt
+
 git pull https://github.com/nkiatos/ansible.git
 
 # Install python3
@@ -33,12 +35,17 @@ sudo useradd ansadmin
 sudo passwd ansadmin
 
 Create the ansadmin sudoers file
+
 sudo touch /etc/sudoers.d/10-ansible-user
+
 sudo echo 'ansadmin ALL=(ALL)      NOPASSWD: ALL' >> /etc/sudoers.d/10-ansible-user
 
 Update /etc/ssh/sshd_config 
+
 PasswordAuthentication yes
+
 #PasswordAuthentication no
+
 sudo systemctl restart sshd
 
 <b><u> ansible master </b></u>
