@@ -120,28 +120,28 @@
   when: airflow_result.stat.exists
 
 #Install Airflow as the airflow user
-- name: Install Airflow as airflow user
-  become: yes
-  become_user: airflow
-  shell: |
-    #!bin/bash
-    source /etc/profile    
-    CONSTRAINT_URL="/tmp/constraints-3.8.txt"
-    export AIRFLOW_HOME=/opt/airflow
-    pip install apache-airflow['postgresql'] --constraint "${CONSTRAINT_URL}" --user
-    #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
-    bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
-    source ~/.bashrc
-  when: not airflow_result.stat.exists
-
-# - name: Install Airflow under airflow user account
+# - name: Install Airflow as airflow user
 #   become: yes
-#   become_user: airflow  
-#   pip:
-#     name: apache-airflow
-#     executable: pip3 #-9.0.3
-#     extra_args: "--constraint /tmp/constraints-3.8.txt --user"
-#     state: present
+#   become_user: airflow
+#   shell: |
+#     #!bin/bash
+#     source /etc/profile    
+#     CONSTRAINT_URL="/tmp/constraints-3.8.txt"
+#     export AIRFLOW_HOME=/opt/airflow
+#     pip install apache-airflow['postgresql'] --constraint "${CONSTRAINT_URL}" --user
+#     #echo export PATH=$PATH:/home/airflow/.local/bin >> ~/.bashrc
+#     bash -c 'echo "export PATH=$PATH:/home/airflow/.local/bin" >> ~/.bashrc'
+#     source ~/.bashrc
+#   when: not airflow_result.stat.exists
+
+- name: Install Airflow under airflow user account
+  become: yes
+  become_user: airflow  
+  pip:
+    name: apache-airflow
+    executable: pip3 #-9.0.3
+    extra_args: "--constraint /tmp/constraints-3.8.txt --user"
+    state: present
 
 - name: Creates airflow_home directory if doesn't exists
   file:
