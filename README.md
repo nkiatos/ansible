@@ -23,10 +23,13 @@ cd /opt/ansible
 
 
 <b> ansible master </b>
+
 ssh-keygen
 
 <b> ansible node </b>
+
 sudo useradd ansadmin
+
 sudo passwd ansadmin
 
 Create the ansadmin sudoers file
@@ -39,7 +42,9 @@ PasswordAuthentication yes
 sudo systemctl restart sshd
 
 <b> ansible master </b>
+
 su ansadmin
+
 ssh-copy-id node ip
 
 
