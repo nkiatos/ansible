@@ -74,3 +74,15 @@ https://github.com/kyungw00k/ansible-airflow
 https://github.com/idealista/airflow-role
 
 https://towardsdatascience.com/how-to-run-apache-airflow-as-daemon-using-linux-systemd-63a1d85f9702
+
+https://www.postgresql.org/docs/current/app-createuser.html
+
+https://airflow.apache.org/docs/apache-airflow-providers-postgres/stable/index.html
+
+https://airflow.apache.org/docs/apache-airflow/stable/start/local.html#running-airflow-locally
+
+https://airflow.apache.org/docs/apache-airflow/stable/howto/set-up-database.html#setting-up-a-postgresql-database
+
+https://airflow.apache.org/docs/apache-airflow/2.2.0/start/local.html
+
+https://airflow.apache.org/docs/apache-airflow/2.2.0/production-deployment.html
