@@ -3,6 +3,10 @@
 sudo su
 cd /opt
 git pull https://github.com/nkiatos/ansible.git
+
+# Install python3
+sudo yum install python3
+
 # Can run as root or create new user to run ansible
 
 # Creating ansible user
@@ -14,7 +18,6 @@ su ansadmin
 
 cd /opt/ansible
 
-# Install python3
 
 # Run ansible playbook
 ansible-playbook -i inventories/hosts configure_airflow_main.yml --check
