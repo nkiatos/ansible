@@ -149,14 +149,16 @@
   pip:
     name: apache-airflow-providers-postgres
     executable: pip3
+    extra_args: "--user"
     state: present
 
 - name: Remove default Airflow sqlite provider
   become: yes
-  become_user: airflow  
+  become_user: airflow
   pip:
     name: apache-airflow-providers-sqlite
     executable: pip3
+    extra_args: "--user"
     state: absent
 
 - name: Creates airflow_home directory if doesn't exists

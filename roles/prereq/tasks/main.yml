@@ -155,6 +155,18 @@
     state: started
     enabled: yes 
 
+- name: Add port 8080 to firewalld
+  become: yes
+  command: firewall-cmd --zone=public --add-port=8080/tcp
+
+- name: Add port 80 to firewalld
+  become: yes
+  command: firewall-cmd --zone=public --add-port=80/tcp
+
+- name: Set ports to permanent
+  become: yes
+  command: firewall-cmd --runtime-to-permanent
+
 - name: Reload the firewall
   become: yes
   service:
