@@ -30,7 +30,6 @@
   become: yes
   become_user: airflow
   shell: |
-    #!/bin/bash
     airflow users create --username admin1 --role Admin --email admin1@admin.com --firstname admin1 --lastname admin --password admin 
   register: create_user_result
   failed when: "'ERROR' in create_user_result.stdout"
