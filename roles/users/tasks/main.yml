@@ -11,9 +11,9 @@
 - name: Check if Admin User exists
   become: yes
   become_user: airflow  
-  shell: |
-    source ~/.bashrc && airflow users list | grep -c "admin" #> /dev/null
-  warn: no
+  shell: 
+    cmd: source ~/.bashrc && airflow users list | grep -c "admin" #> /dev/null
+    warn: no
   register: user_exists_result
 
 - name: Admin user exists
