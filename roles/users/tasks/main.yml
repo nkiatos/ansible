@@ -35,6 +35,7 @@
   # failed when: "'ERROR' in create_user_result.stdout"
   when: user_exists_result.rc == 0
 
+#something
 # - debug:
 #     msg: "The Admin user exists"
 #   when: create_user_result.rc | default ('') == 0 
