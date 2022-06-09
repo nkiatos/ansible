@@ -12,9 +12,9 @@
   register: user_exists_result
   failed_when: "user_exists_result.rc not in [ 0,2 ]"
 
-# - debug:
-#     msg: "The Admin user exists, skipping next step"
-#   when: user_exists_result.rc == 0 
+- debug:
+    msg: "The Admin user exists, skipping next step"
+  when: user_exists_result.rc == 0 
 
 
 # - name: "Create the Admin User"
