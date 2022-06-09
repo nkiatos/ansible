@@ -18,12 +18,14 @@
 
 - name: User exists
   debug:
-    msg: "{{ user_exists_result.stdout }}"
+    #msg: "{{ user_exists_result.stdout }}"
+    msg: User exists
   when: user_exists_result.stdout == "1"
 
 - name: User does not exist
   debug:
-    msg: "{{ user_exists_result.stdout }}"
+    #msg: "{{ user_exists_result.stdout }}"
+    msg: User doesn't exist, running create user step
   when: user_exists_result.stdout == "0"
 
 - name: Create the Admin User
