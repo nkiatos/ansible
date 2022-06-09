@@ -5,12 +5,12 @@
   become_user: airflow
   shell: |
     #!/bin/bash
-    airflow users list' | grep -c "admin1" > /dev/null 2>&1
-    #if 'airflow users list' | grep -c "admin1" > /dev/null 2>&1; then
-    #        echo "PASS"
-    #else
-    #        echo "ERROR"
-    #fi
+    airflow users list | grep -c "admin1" > /dev/null 2>&1
+    ##if 'airflow users list' | grep -c "admin1" > /dev/null 2>&1; then
+    ##        echo "PASS"
+    ##else
+    ##        echo "ERROR"
+    ##fi
   register: user_exists_result
   failed_when: "user_exists_result.rc not in [ 0,2 ]"
 
