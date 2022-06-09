@@ -18,13 +18,13 @@
 
 - name: Admin user exists
   debug:
-    msg: "{{ user_exists_result.stdout }}"
-  when: user_exists_result.stdout == 1
+    msg: "{{ user_exists_result.rc }}"
+  when: user_exists_result.rc == 1
 
 - name: Admin user does not exist
   debug:
-    msg: "{{ user_exists_result.stdout }}"
-  when: user_exists_result.stdout == 0
+    msg: "{{ user_exists_result.rc }}"
+  when: user_exists_result.rc == 0
 
 # - name: Create the Admin User
 #   become: yes
