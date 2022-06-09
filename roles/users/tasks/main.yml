@@ -14,7 +14,7 @@
   shell: 
     cmd: source ~/.bashrc && airflow users list | grep -c "admin1" #> /dev/null
   register: user_exists_result
-  failed_when: "user_exists_result.rc not in [ 0,1 ]"
+  failed_when: "user_exists_result.rc not in [ 0, 1 ]"
 
 - name: Admin user exists
   debug:
