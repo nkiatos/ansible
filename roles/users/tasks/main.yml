@@ -13,9 +13,9 @@
   failed_when: "user_exists_result.rc not in [ 0,2 ]"
 
 - debug:
-    msg: "The Admin user exists, skipping next step"
-    msg: echo user_exists_result.stdout
-  when: user_exists_result.rc == 0 
+    #msg: "The Admin user exists, skipping next step"
+    msg: "{{ user_exists_result.stdout }}"
+  #when: user_exists_result.rc == 0 
 
 
 # - name: Create the Admin User
