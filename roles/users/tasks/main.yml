@@ -12,21 +12,21 @@
   register: user_exists_result
   failed_when: "user_exists_result.rc not in [ 0,2 ]"
 
-- debug:
-    msg: "The Admin user exists, skipping next step"
-  when: user_exists_result.rc == 0 
+# - debug:
+#     msg: "The Admin user exists, skipping next step"
+#   when: user_exists_result.rc == 0 
 
 
-- name: "Create the Admin User"
-  become: yes
-  become_user: airflow
-  shell: |
-    #!/bin/bash
-    airflow users create --username admin --role Admin --email admin@admin.com --firstname admin --lastname admin --password admin 
-  register: create_user_result
-  failed when: "'ERROR' in create_user_result.stdout"
-  when: user_exists_result.rc == 2
+# - name: "Create the Admin User"
+#   become: yes
+#   become_user: airflow
+#   shell: |
+#     #!/bin/bash
+#     airflow users create --username admin --role Admin --email admin@admin.com --firstname admin --lastname admin --password admin 
+#   register: create_user_result
+#   failed when: "'ERROR' in create_user_result.stdout"
+#   when: user_exists_result.rc == 2
 
-- debug:
-    msg: "The Admin user exists"
-  when: create_user_result.rc | default ('') == 0 
+# - debug:
+#     msg: "The Admin user exists"
+#   when: create_user_result.rc | default ('') == 0 
