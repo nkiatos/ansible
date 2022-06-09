@@ -19,7 +19,7 @@
 - debug:
     msg: "The Admin user exists, skipping next step"
     msg: "{{ user_exists_result.stdout }}"
-  when: user_exists_result.rc == 0 
+  when: user_exists_result.rc == 1
 
 
 # - name: Create the Admin User
