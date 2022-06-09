@@ -14,17 +14,17 @@
   shell: 
     cmd: source ~/.bashrc && airflow users list | grep -c "admin1" #> /dev/null
   register: user_exists_result
-  failed_when: "user_exists_result.stdout not in [ 0,1 ]"
+  failed_when: "user_exists_result.rc not in [ 0,1 ]"
 
 - name: Admin user exists
   debug:
-    msg: "{{ user_exists_result. }}"
-  when: user_exists_result.rc == 1
+    msg: "{{ user_exists_result.stdout }}"
+  when: user_exists_result.stdout == 1
 
 - name: Admin user does not exist
   debug:
     msg: "{{ user_exists_result.stdout }}"
-  when: user_exists_result.rc == 0
+  when: user_exists_result.stdout == 0
 
 # - name: Create the Admin User
 #   become: yes
