@@ -8,9 +8,10 @@
   #failed_when: "user_exists_result.rc not in [ 0,2 ]"
 
 - name: Check if Admin User exists
-  become: false
-  command: airflow users list #| grep -c "admin" #> /dev/null 2>&1
+  become: yes
   become_user: airflow  
+
+  command: echo pwd #airflow users list #| grep -c "admin" #> /dev/null 2>&1
 
   # register: user_exists_result
 
