@@ -10,8 +10,10 @@
 - name: Check if Admin User exists
   become: yes
   become_user: airflow  
-  shell: 
-    cmd: source ~/.bashrc &&  airflow users list | grep -c "admin1" > /dev/null 2>&1
+  shell: |
+    ## cmd: source ~/.bashrc &&  airflow users list | grep -c "admin1" > /dev/null 2>&1
+    source ~/.bashrc &&  airflow users list | grep -c "admin1" > /dev/null 2>&1
+
   register: user_exists_result
 
 
