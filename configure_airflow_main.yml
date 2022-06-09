@@ -4,6 +4,7 @@
   become: true
   gather_facts: yes
   roles:
-    - prereq
-    - repos
-    - airflow
+    # - prereq
+    # - repos
+    # - airflow
+    - users
