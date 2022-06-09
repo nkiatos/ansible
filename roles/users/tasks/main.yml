@@ -16,15 +16,15 @@
   register: user_exists_result
   failed_when: "user_exists_result.rc not in [ 0, 1 ]"
 
-- name: User does not exist
-  debug:
-    msg: "{{ user_exists_result.rc }}"
-  when: user_exists_result.rc == 0
-
 - name: User exists
   debug:
     msg: "{{ user_exists_result.rc }}"
   when: user_exists_result.rc == 1
+
+- name: User does not exist
+  debug:
+    msg: "{{ user_exists_result.rc }}"
+  when: user_exists_result.rc == 0
 
 - name: Create the Admin User
   become: yes
