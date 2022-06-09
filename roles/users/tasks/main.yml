@@ -29,8 +29,8 @@
 - name: Create the Admin User
   become: yes
   become_user: airflow
-  shell: |
-    airflow users create --username admin1 --role Admin --email admin1@admin.com --firstname admin1 --lastname admin --password admin 
+  shell: 
+    cmd: airflow users create --username admin1 --role Admin --email admin1@admin.com --firstname admin1 --lastname admin --password admin 
   register: create_user_result
   failed when: "'ERROR' in create_user_result.stdout"
   when: user_exists_result.rc == 1                                                                  
