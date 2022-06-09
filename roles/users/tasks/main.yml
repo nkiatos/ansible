@@ -1,5 +1,3 @@
-## Checking if the Admin user exists, if it doen't will run the create command
-
 - name: Check if Admin User exists
   become: yes
   become_user: airflow
