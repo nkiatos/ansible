@@ -14,7 +14,7 @@
 
 - debug:
     msg: "The Admin user exists, skipping next step"
-    msg: user_exists_result.stdout
+    msg: echo user_exists_result.stdout
   when: user_exists_result.rc == 0 
 
 
