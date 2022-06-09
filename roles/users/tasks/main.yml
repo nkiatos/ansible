@@ -24,7 +24,7 @@
 - name: User does not exist
   debug:
     msg: "{{ user_exists_result.stdout }}"
-  when: user_exists_result.rc == "0"
+  when: user_exists_result.stdout == "0"
 
 - name: Create the Admin User
   become: yes
