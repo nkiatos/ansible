@@ -10,7 +10,7 @@
     ##        echo "ERROR"
     ##fi
   register: user_exists_result
-  failed_when: "user_exists_result.rc not in [ 0,2 ]"
+  #failed_when: "user_exists_result.rc not in [ 0,2 ]"
 
 - debug:
     #msg: "The Admin user exists, skipping next step"
