@@ -6,13 +6,13 @@
 #     airflow users list | grep -c "admin" > /dev/null 2>&1;
   #register: user_exists_result
   #failed_when: "user_exists_result.rc not in [ 0,2 ]"
+    ## cmd: source ~/.bashrc &&  airflow users list | grep -c "admin1" > /dev/null 2>&1
 
 - name: Check if Admin User exists
   become: yes
   become_user: airflow  
   shell: |
-    ## cmd: source ~/.bashrc &&  airflow users list | grep -c "admin1" > /dev/null 2>&1
-    source ~/.bashrc && airflow users list | grep -c "admin1" #> /dev/null
+    source ~/.bashrc && airflow users list | grep -c "admin" #> /dev/null
   register: user_exists_result
 
 - name: Admin user exists
