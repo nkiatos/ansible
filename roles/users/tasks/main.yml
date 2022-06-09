@@ -11,7 +11,7 @@
   become: yes
   become_user: airflow  
   command: 
-    cmd: airflow users list #| grep -c "admin" #> /dev/null 2>&1
+    cmd: "airflow users list" #| grep -c "admin" #> /dev/null 2>&1
   register: user_exists_result
 
 
