@@ -10,7 +10,8 @@
 - name: Check if Admin User exists
   become: yes
   become_user: airflow  
-  command: whoami #airflow users list #| grep -c "admin" #> /dev/null 2>&1
+  command: 
+    cmd: whoami #airflow users list #| grep -c "admin" #> /dev/null 2>&1
   register: user_exists_result
 
 
