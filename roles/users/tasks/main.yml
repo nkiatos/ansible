@@ -16,8 +16,8 @@
 
 
 
-- debug:
-    msg: "The Admin user exists, skipping next step"
+- name: Admin user exists
+  debug:
     msg: "{{ user_exists_result.stdout }}"
   when: user_exists_result.rc == 1
 
