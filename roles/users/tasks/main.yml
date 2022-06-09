@@ -17,7 +17,7 @@
   when: user_exists_result.rc == 0 
 
 
-- name: "Create the Admin User"
+- name: Create the Admin User
   become: yes
   become_user: airflow
   shell: |
