@@ -89,7 +89,10 @@ https://airflow.apache.org/docs/apache-airflow/2.2.0/production-deployment.html
 
 Airflow Users + Groups
 https://levelup.gitconnected.com/airflow-command-line-interface-cli-cheat-sheet-6e5d90bd3552
+
 https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html
+
 https://towardsdatascience.com/create-airflow-roles-with-permissions-from-cli-64e05aaeb2fc
 
-
+# Jquery commands
+https://tecadmin.net/linux-jq-command/
