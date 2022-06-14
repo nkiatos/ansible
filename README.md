@@ -68,7 +68,59 @@ sudo firewall-cmd --runtime-to-permanent
 
 sudo firewall-cmd --reload
 
+# To do
+
+Update the installation command to add amazon provider
+
+https://airflow.apache.org/docs/apache-airflow/stable/installation/installing-from-pypi.html
+
+[airflow@ip-172-31-31-158 ~]$ pip install apache-airflow[amazon]==2.3.1 --constraint /tmp/constraints-3.8.txt --user
+
+
+# S3 Remote Logging #
+
+Add airflow connection
+
+airflow connections add 's3_conn' --conn-type 's3'
+
+Update following files and change perms i think to 755
+
+vi /usr/lib/systemd/system/airflow-webserver.service
+
+[Service]
+
+Environment="PATH=$PATH:/home/airflow/.local/bin"
+
+vi /usr/lib/systemd/system/airflow-scheduler.service
+
+[Service]
+
+Environment="PATH=$PATH:/home/airflow/.local/bin"
+
+Update /opt/airflow/airflow.cfg with following
+
+[logging]
+
+remote_logging = True
+
+remote_log_conn_id = s3_conn
+
+remote_base_log_folder = s3://nk-airflow-logs/logs
+
+encrypt_s3_logs = True
+
+
+
 # Helpful URLs
+
+https://airflow.apache.org/docs/apache-airflow/1.10.14/howto/connection/aws.html
+
+https://www.cloudwalker.io/2020/06/28/airflow-remote-logging-using-aws-s3/
+
+https://airflow.apache.org/docs/apache-airflow/stable/howto/connection.html#uri-format
+
+https://pypi.org/project/apache-airflow/
+
 https://github.com/kyungw00k/ansible-airflow
 
 https://github.com/idealista/airflow-role
